@@ -1,7 +1,7 @@
 import "./App.css";
 import { useState, useEffect } from "react";
 import Web3 from "web3/dist/web3.min.js";
-import Todo from "./abis/Todo.json";
+import Todo from "./build/contracts/Todo.json";
 function App() {
   const [account, setAccount] = useState("");
   const [todo, setTodo] = useState();
@@ -61,7 +61,10 @@ function App() {
     loadBlockchainData();
   }, []);
   const add = async () => {
+    setLoading(true);
     await todo.methods.createTask(value).send({ from: account });
+    window.location.reload();
+    setLoading(false);
   };
   //console.log(tasks);
 
@@ -76,9 +79,7 @@ function App() {
 
       <button onClick={add}>add</button>
       {taskCount}
-      {tasks.map((i, key) => (
-        <h3 key={key}>{i.cotent}</h3>
-      ))}
+      {tasks.map((i, key) => <h3 key={key}>{i.cotent}</h3>)}
     </div>
   );
 }
